@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contor Costuri</title>
+  <link rel="manifest" href="manifest.json">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f2f2f2;
+    }
+    h1 {
+      text-align: center;
+    }
+    .total {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background-color: #333;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 18px;
+    }
+    .item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 10px 0;
+      background: white;
+      padding: 10px;
+      border-radius: 8px;
+    }
+    .buttons button {
+      margin: 0 5px;
+      font-size: 18px;
+    }
+    .reset-btn {
+      margin-top: 30px;
+      display: block;
+      padding: 10px 20px;
+      font-size: 16px;
+      background: red;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Contor Costuri</h1>
+  <div class="total">Total: <span id="total">0</span> RON</div>
+
+  <div class="item">
+    <span>🎬 Videoclipuri în Canva</span>
+    <div class="buttons">
+      <span id="canvaVideo">0</span>
+      <button onclick="increase('canvaVideo')">+</button>
+    </div>
+  </div>
+
+  <div class="item">
+    <span>📄 Șablon Canva</span>
+    <div class="buttons">
+      <span id="canvaTemplate">0</span>
+      <button onclick="increase('canvaTemplate')">+</button>
+    </div>
+  </div>
+
+  <div class="item">
+    <span>📊 Kahoot</span>
+    <div class="buttons">
+      <span id="kahoot">0</span>
+      <button onclick="increase('kahoot')">+</button>
+    </div>
+  </div>
+
+  <div class="item">
+    <span>📱 Aplicație Manus</span>
+    <div class="buttons">
+      <span id="manus">0</span>
+      <button onclick="increase('manus')">+</button>
+    </div>
+  </div>
+
+  <div class="item">
+    <span>🎙️ Podcast</span>
+    <div class="buttons">
+      <span id="podcast">0</span>
+      <button onclick="increase('podcast')">+</button>
+    </div>
+  </div>
+
+  <div class="item">
+    <span>🎞️ Videoclip</span>
+    <div class="buttons">
+      <span id="videoclip">0</span>
+      <button onclick="increase('videoclip')">+</button>
+    </div>
+  </div>
+
+  <div class="item">
+    <span>🎬 Trailer</span>
+    <div class="buttons">
+      <span id="trailer">0</span>
+      <button onclick="increase('trailer')">+</button>
+    </div>
+  </div>
+
+  <button class="reset-btn" onclick="resetAll()">🔄 Plătit</button>
+
+  <script>
+    const prices = {
+      canvaVideo: 40,
+      canvaTemplate: 20,
+      kahoot: 20,
+      manus: 35,
+      podcast: 200,
+      videoclip: 75,
+      trailer: 75,
+    };
+
+    function loadState() {
+      let total = 0;
+      for (const key in prices) {
+        const count = parseInt(localStorage.getItem(key)) || 0;
+        document.getElementById(key).innerText = count;
+        total += count * prices[key];
+      }
+      document.getElementById("total").innerText = total;
+    }
+
+    function increase(item) {
+      let count = parseInt(localStorage.getItem(item)) || 0;
+      count++;
+      localStorage.setItem(item, count);
+      loadState();
+    }
+
+    function resetAll() {
+      for (const key in prices) {
+        localStorage.setItem(key, 0);
+      }
+      loadState();
+    }
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js');
+      });
+    }
+
+    window.onload = loadState;
+  </script>
+</body>
+</html>
